@@ -18,13 +18,13 @@ function App(props){
   return (
   <>
   {/* <GameOfLife /> */}
-  <div style={{display:'flex', border:'2px solid red'}}>
-     <div style={{border:'2px solid red', marginLeft:'5%'}}>
+  <div style={{display:'flex'}}>
+     <div style={{marginLeft:'5%'}}>
      <div style={{}}>
     <GameOfLife />
       </div>
     </div>
-     <div style={{border:'2px solid red', display:'flex',flexDirection:'column', marginLeft:'25%', fontSize:'30px', marginRight:'1%', marginTop:'1%'}}>Rules:
+     <div style={{display:'flex',flexDirection:'column', marginLeft:'25%', fontSize:'30px', marginRight:'1%', marginTop:'1%'}}>Rules:
      <li>Any live cell with fewer than two live neighbours dies, as if by underpopulation.</li>
      <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
      <li>Any live cell with more than three live neighbours dies, as if by overpopulation.</li>

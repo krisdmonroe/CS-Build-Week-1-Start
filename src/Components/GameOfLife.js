@@ -28,11 +28,12 @@ const GameOfLife = (props) => {
   });
   const [running, setRunning] = useState(false);
   // running state is updated but run simulation is ran one time so we need a reference
-  const runningRef = useRef();
+  const runningRef = useRef(running);
   runningRef.current = running
   // function only created one time with useCallback
   const runSimulation = useCallback(() => {
-    if(!runningRef){
+    // allows us to stop and start simulation
+    if(!runningRef.current){
       return;
     }
     // rules
@@ -82,6 +83,10 @@ const GameOfLife = (props) => {
     key={`${i}-${k}`}
 
     onClick={() => {
+      // doesnt allow clicking while game is running
+      if(running){
+        return;
+      }else{
       // user immer instead of mutating state
       // grid[i][k] = 1
       // pass current grid value
@@ -91,22 +96,30 @@ const GameOfLife = (props) => {
         gridCopy[i][k] = grid[i][k] ? 0 : 1;
       });
       setGrid(newGrid);
+    }
     }}
 
     style={{ 
     width: 20, 
     height: 20, 
-    backgroundColor: grid[i][k] ? 'pink' : undefined,
+    backgroundColor: grid[i][k] ? 'black' : undefined,
     border:'1px solid black' 
     }}
     />
     ))}
   </div>
 
-  <Button  variant="contained"
+  <Button
+  variant="contained"
   onClick={() => {
-    setRunning(!running)
-  }}>{running ? 'stop' : 'start'}</Button>
+    setRunning(!running);
+    if (!running) {
+      runningRef.current = true;
+      runSimulation();
+    }
+  }}>
+    {running ? 'stop' : 'start'}
+    </Button>
 
   </>
   );

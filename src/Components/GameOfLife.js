@@ -19,9 +19,8 @@ const [rows, setRows] = useState(25)
 const [cols, setCols] = useState(25)
 const numRows = rows;
 const numCols = cols;
+// make the grid have all values set to 0
 const generateEmptyGrid = () => {
-
-
   // initial values for all cells
   const rows = [];
     for(let i = 0; i < numRows; i++){
@@ -55,25 +54,25 @@ const generateEmptyGrid = () => {
       return produce(g, gridCopy => {
         // go through every value in the the grid
         for (let i=0; i < numRows; i++){
-          for(let k = 0; k < numCols; k++){
+          for(let j = 0; j < numCols; j++){
             let neighbors = 0;
            operations.forEach(([x, y]) => {
              const newI = i + x;
-             const newK = k + y;
+             const newJ = j + y;
             //  check the bounds/ does not allow past edges
-             if(newI >= 0 && newI < numRows && newK >= 0 && newK < numCols){
+             if(newI >= 0 && newI < numRows && newJ >= 0 && newJ < numCols){
               //  add 1 to neighbors if its a live cell
-              neighbors += g[newI][newK]
+              neighbors += g[newI][newJ]
              }
            })
           //  Covers first 2 rules
           // less then 2 dies greater then 3 dies
            if(neighbors < 2 || neighbors > 3){
-             gridCopy[i][k] = 0;
+             gridCopy[i][j] = 0;
            }
           //  cell is dead but has 3 neighbors turn that cell alive
-            else if(g[i][k] === 0 && neighbors === 3){
-             gridCopy[i][k] = 1;
+            else if(g[i][j] === 0 && neighbors === 3){
+             gridCopy[i][j] = 1;
            }
           }
         }
@@ -105,12 +104,12 @@ const generateEmptyGrid = () => {
   <div style={{
     display:'grid',
     // can specify how many columns and second property is how big
-    gridTemplateColumns:`repeat(${numCols}, 20px)`
+    gridTemplateColumns:`repeat(${numCols}, 22px)`
   }}>
     {grid.map((rows, i) => 
-    rows.map((col, k) => 
+    rows.map((col, j) => 
     <div 
-    key={`${i}-${k}`}
+    key={`${i}-${j}`}
 
     onClick={() => {
       // doesnt allow clicking while game is running
@@ -118,12 +117,12 @@ const generateEmptyGrid = () => {
         return;
       }else{
       // user immer instead of mutating state
-      // grid[i][k] = 1
+      // grid[i][j] = 1
       // pass current grid value
       // makes mutable change and makes new grid for us
       const newGrid = produce(grid, gridCopy => {
-        // makes the on click toggle at position grid[i][k]
-        gridCopy[i][k] = grid[i][k] ? 0 : 1;
+        // makes the on click toggle at position grid[i][j]
+        gridCopy[i][j] = grid[i][j] ? 0 : 1;
       });
       setGrid(newGrid);
     }
@@ -132,7 +131,7 @@ const generateEmptyGrid = () => {
     style={{ 
     width: 20, 
     height: 20, 
-    backgroundColor: grid[i][k] ? color : undefined,
+    backgroundColor: grid[i][j] ? color : undefined,
     border:'1px solid black' 
     }}
     />
@@ -160,6 +159,7 @@ const generateEmptyGrid = () => {
       return;
     }
     setGrid(generateEmptyGrid())
+    setCount(0)
   }}
   style={{
     marginLeft:'5%'
@@ -168,6 +168,24 @@ const generateEmptyGrid = () => {
     Clear
   </Button>
 
+  <Button
+  variant="contained"
+  style={{
+    marginLeft:'3%'
+  }}
+  onClick={()=> {
+    const rows = [];
+    for(let i = 0; i < numRows; i++){
+      // allows for setting of values instead of the inital 0 it is set to 1 randomly
+      rows.push(Array.from(Array(numCols), () => Math.random() > .5 ? 1 : 0))
+    }
+    setGrid(rows);
+  }}
+  >
+    Random
+  </Button>  
+
+  </div>
   <input 
   onChange={handleColorChange}
   placeholder= 'Change Color'
@@ -189,8 +207,8 @@ const generateEmptyGrid = () => {
     marginTop:'2%',
     marginRight:'2%',
     height:'90%'
-  }}/>   
-  </div>
+  }}/>
+
   <input 
   onChange={handleRowChange}
   placeholder= 'Change Rows'
@@ -212,7 +230,7 @@ const generateEmptyGrid = () => {
     marginTop:'2%',
     marginRight:'2%',
     height:'90%'
-  }}/>
+  }}/>  
   </>
   );
 }

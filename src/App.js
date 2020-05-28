@@ -17,7 +17,7 @@ height:40%;
 function App(props){
   return (
   <>
-  {/* <GameOfLife /> */}
+  <h1 style={{textAlign:'center'}}> Conway's Game of Life</h1>
   <div style={{display:'flex'}}>
      <div style={{marginLeft:'5%'}}>
      <div style={{}}>
@@ -32,6 +32,10 @@ function App(props){
     
      </div>
   </div>
+  <p style={{textAlign:'center'}}>About this Algorithm</p>
+  <p style={{textAlign:'center'}}> The Creator John Horton Conway, devised of this in 1970.There are many basic patterns in the GameOfLife
+  Such as the glider gun allowing for an infinite amount of gliders.There are now more than 700 basic patterns, which have now been named and are described in Stephen Silver's Lexicon.
+  </p>
   </>
   );
 }
